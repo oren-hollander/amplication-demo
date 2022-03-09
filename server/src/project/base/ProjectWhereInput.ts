@@ -13,7 +13,8 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { TaskListRelationFilter } from "../../task/base/TaskListRelationFilter";
 @InputType()
 class ProjectWhereInput {
   @ApiProperty({
@@ -26,5 +27,17 @@ class ProjectWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => TaskListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => TaskListRelationFilter)
+  @IsOptional()
+  @Field(() => TaskListRelationFilter, {
+    nullable: true,
+  })
+  tasks?: TaskListRelationFilter;
 }
 export { ProjectWhereInput };
